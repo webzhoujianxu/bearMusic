@@ -8,7 +8,7 @@
         <HotScroll :click="true" :scrollX="true">
             <div class="MusicBar">
                 <router-link tag="div" to="/HotPage" class="MusicBar-item"><span class="inset">推荐音乐</span></router-link>
-                <router-link tag="div" to="/b" class="MusicBar-item"><span class="inset">热门榜单</span></router-link>
+                <router-link tag="div" to="/HotMusic" class="MusicBar-item"><span class="inset">热门榜单</span></router-link>
                 <router-link tag="div" to="/c" class="MusicBar-item"><span class="inset">热门歌手榜</span></router-link>
                 <router-link tag="div" to="/f" class="MusicBar-item"><span class="inset">搜索</span></router-link>
                 <router-link tag="div" to="/f" class="MusicBar-item"><span class="inset">最新歌曲</span></router-link>
