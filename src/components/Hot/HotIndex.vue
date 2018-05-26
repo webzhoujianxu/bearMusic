@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="per">
         <hot-scroll class="HotWrap" ref="HotWrap" :click="true">
             <div style="overflow: auto">
                 <h2 class="HotTitle">推荐歌单</h2>
@@ -33,19 +33,7 @@
                     </div>
                 </div>
                 <h2 class="HotTitle" style="margin-top: .5rem;margin-bottom: .4rem">最新音乐</h2>
-                <div class="hotMusicList">
-                    <div class="hotMusicList-item" v-for="item in MusicList" v-bind:key="item.value">
-                        <div class="hotMusicList-left">
-                            <p class="hotMusicList-left-title">{{item.name}}<span v-for="items in item.song.alias"
-                                                                                  class="smalltitle">{{'(' + items + ')'}}</span>
-                            </p>
-                            <p class="hotMusicList-left-tag"><img src="../../BaseMenu/index_ic.png" class="tag" v-if="item.song.album.status===0">{{item.song.artists[0].name}} - {{item.song.album.name}}</p>
-                        </div>
-                        <div class="hotMusicList-right">
-                            <img src="../../BaseMenu/play.png">
-                        </div>
-                    </div>
-                </div>
+                <list :MusicList="MusicList"></list>
             </div>
         </hot-scroll>
         <Loadings :IsShow="IsShow"></Loadings>
@@ -53,13 +41,15 @@
 </template>
 <script>
     import HotScroll from '../base/scroll.vue';
-    import Loadings from '../base/loading.vue'
+    import Loadings from '../base/loading.vue';
+    import list from '../base/list.vue';
     import {api} from '../../BaseMenu/config';
 
     export default {
         components: {
             HotScroll,
-            Loadings
+            Loadings,
+            list
         },
         data() {
             return {
@@ -71,9 +61,6 @@
         },
         created() {
             this.getNewMusicList()
-        },
-        activated(){
-            this.$refs.HotWrap.refresh();
         },
         methods: {
             getNewMusicList() {
