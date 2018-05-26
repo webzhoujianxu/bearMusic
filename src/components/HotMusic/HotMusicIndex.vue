@@ -1,7 +1,6 @@
 <template>
     <div>
-
-        <hot-scroll class="HotWrap" ref="HotWrap" :click="true" :probeType="2" :listenScroll="true" @scroll="listenerScrolls">
+        <hot-scroll class="HotWrap" ref="HotWrap" :click="true" :probeType="2" :listenScroll="true" >
             <div style="overflow: auto">
                 <div class="heads">
                     <img :src="coverList.coverImgUrl" class="backg" ref="bgs">
@@ -22,20 +21,24 @@
                 </div>
             </div>
         </hot-scroll>
+        <Loadings :IsShow="IsShow"></Loadings>
     </div>
 </template>
 <script>
     import HotScroll from '../base/scroll.vue';
+    import Loadings from '../base/loading.vue';
     import {api} from '../../BaseMenu/config';
 
     export default {
         components: {
-            HotScroll
+            HotScroll,
+            Loadings
         },
         data() {
             return {
                 MusicList: [],
-                coverList:[]
+                coverList:[],
+                IsShow:true
             }
         },
         created() {
@@ -54,9 +57,11 @@
 
                 ])
                     .then(this.$axios.spread((res) => {
-
                         this.coverList = res.data.playlist;
-                        this.MusicList = res.data.playlist.tracks
+                        this.MusicList = res.data.playlist.tracks;
+                        this.$nextTick(()=>{
+                            this.IsShow = false;
+                        })
                     }))
 
             },

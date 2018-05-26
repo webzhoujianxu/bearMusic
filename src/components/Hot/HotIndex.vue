@@ -1,66 +1,72 @@
 <template>
-    <hot-scroll class="HotWrap" ref="HotWrap" :click="true">
-        <div style="overflow: auto">
-            <h2 class="HotTitle">推荐歌单</h2>
-            <div class="HotMenuList">
-                <div class="HotMenuList-item" v-for="item in MenuList" :key="item.value">
-                    <div class="HotMenuList-item-head">
-                        <img :src="item.picUrl" class="picUrl">
-                        <div class="HotMenuList-item-Number">
-                            <img src="../../BaseMenu/st.png">
-                            <span>{{(item.playCount / 10000).toFixed(1) + '万'}}</span>
+    <div>
+        <hot-scroll class="HotWrap" ref="HotWrap" :click="true">
+            <div style="overflow: auto">
+                <h2 class="HotTitle">推荐歌单</h2>
+                <div class="HotMenuList">
+                    <div class="HotMenuList-item" v-for="item in MenuList" :key="item.value">
+                        <div class="HotMenuList-item-head">
+                            <img :src="item.picUrl" class="picUrl">
+                            <div class="HotMenuList-item-Number">
+                                <img src="../../BaseMenu/st.png">
+                                <span>{{(item.playCount / 10000).toFixed(1) + '万'}}</span>
+                            </div>
                         </div>
-                    </div>
-                    <p class="HotMenuList-text">
-                        {{item.name}}
-                    </p>
-                </div>
-            </div>
-            <h2 class="HotTitle">推荐电台</h2>
-            <div class="HotMenuList">
-                <div class="HotMenuList-item" v-for="item in dialogsList" :key="item.value">
-                    <div class="HotMenuList-item-head">
-                        <img :src="item.picUrl" class="picUrl">
-                        <div class="HotMenuList-item-Number">
-                            <img src="../../BaseMenu/st.png">
-                            <span>{{(item.program.listenerCount / 10000).toFixed(1) + '万'}}</span>
-                        </div>
-                    </div>
-                    <p class="HotMenuList-text">
-                        {{item.name}}
-                    </p>
-                </div>
-            </div>
-            <h2 class="HotTitle" style="margin-top: .5rem;margin-bottom: .4rem">最新音乐</h2>
-            <div class="hotMusicList">
-                <div class="hotMusicList-item" v-for="item in MusicList" v-bind:key="item.value">
-                    <div class="hotMusicList-left">
-                        <p class="hotMusicList-left-title">{{item.name}}<span v-for="items in item.song.alias"
-                                                                              class="smalltitle">{{'(' + items + ')'}}</span>
+                        <p class="HotMenuList-text">
+                            {{item.name}}
                         </p>
-                        <p class="hotMusicList-left-tag"><img src="../../BaseMenu/index_ic.png" class="tag" v-if="item.song.album.status===0">{{item.song.artists[0].name}} - {{item.song.album.name}}</p>
                     </div>
-                    <div class="hotMusicList-right">
-                        <img src="../../BaseMenu/play.png">
+                </div>
+                <h2 class="HotTitle">推荐电台</h2>
+                <div class="HotMenuList">
+                    <div class="HotMenuList-item" v-for="item in dialogsList" :key="item.value">
+                        <div class="HotMenuList-item-head">
+                            <img :src="item.picUrl" class="picUrl">
+                            <div class="HotMenuList-item-Number">
+                                <img src="../../BaseMenu/st.png">
+                                <span>{{(item.program.listenerCount / 10000).toFixed(1) + '万'}}</span>
+                            </div>
+                        </div>
+                        <p class="HotMenuList-text">
+                            {{item.name}}
+                        </p>
+                    </div>
+                </div>
+                <h2 class="HotTitle" style="margin-top: .5rem;margin-bottom: .4rem">最新音乐</h2>
+                <div class="hotMusicList">
+                    <div class="hotMusicList-item" v-for="item in MusicList" v-bind:key="item.value">
+                        <div class="hotMusicList-left">
+                            <p class="hotMusicList-left-title">{{item.name}}<span v-for="items in item.song.alias"
+                                                                                  class="smalltitle">{{'(' + items + ')'}}</span>
+                            </p>
+                            <p class="hotMusicList-left-tag"><img src="../../BaseMenu/index_ic.png" class="tag" v-if="item.song.album.status===0">{{item.song.artists[0].name}} - {{item.song.album.name}}</p>
+                        </div>
+                        <div class="hotMusicList-right">
+                            <img src="../../BaseMenu/play.png">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </hot-scroll>
+        </hot-scroll>
+        <Loadings :IsShow="IsShow"></Loadings>
+    </div>
 </template>
 <script>
     import HotScroll from '../base/scroll.vue';
+    import Loadings from '../base/loading.vue'
     import {api} from '../../BaseMenu/config';
 
     export default {
         components: {
-            HotScroll
+            HotScroll,
+            Loadings
         },
         data() {
             return {
                 MenuList: [],
                 MusicList: [],
-                dialogsList:[]
+                dialogsList:[],
+                IsShow:true
             }
         },
         created() {
@@ -79,7 +85,10 @@
                     .then(this.$axios.spread((res, songs,dialogs) => {
                         this.MenuList = res.data.result;
                         this.MusicList = songs.data.result;
-                        this.dialogsList = dialogs.data.result
+                        this.dialogsList = dialogs.data.result;
+                        this.$nextTick(()=>{
+                             this.IsShow = false;
+                        })
                     }))
 
             }

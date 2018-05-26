@@ -1,1 +1,1 @@
-export const api  = 'http://192.168.1.9:3000/';
+export const api  = 'http://www.webzjx.cn:88/';

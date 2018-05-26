@@ -2,7 +2,7 @@
     <div>
         <div class="MusicHead">
                 <span class="MusicTitle">
-                    比比熊音乐
+                    BearMusic | 比比熊音乐
                 </span>
         </div>
         <HotScroll :click="true" :scrollX="true">
