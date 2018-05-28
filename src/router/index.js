@@ -4,6 +4,7 @@ import HotIndex from '@/components/Hot/HotIndex.vue';
 import HotMusic from '@/components/HotMusic/HotMusicIndex.vue';
 import singer from '@/components/singer/singer.vue';
 import singerDetail from '@/components/singer/singerDetail.vue';
+import search from '@/components/search/search.vue';
 Vue.use(Router)
 
 export default new Router({
@@ -29,6 +30,10 @@ export default new Router({
                     component:singerDetail
                 }
             ]
+        },
+        {
+            path:'/search',
+            component:search
         }
     ]
 })

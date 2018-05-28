@@ -39,12 +39,23 @@
             flick: {
                 type: Boolean,
                 default: false
+            },
+            data:{
+                type:Array,
+                default:null
             }
         },
         mounted() {
             this.$nextTick(() => {
                 this.initBestScroll();
             })
+        },
+        watch:{
+            data(){
+                 this.$nextTick(()=>{
+                     this.refresh()
+                 })
+            }
         },
         methods: {
             initBestScroll() {

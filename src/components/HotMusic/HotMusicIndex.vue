@@ -5,21 +5,7 @@
                 <div class="heads">
                     <img :src="coverList.coverImgUrl" class="backg" ref="bgs">
                 </div>
-                <list :MusicList="MusicList" :MenuType="1"></list>
-                <!--<div class="hotMusicList">-->
-                    <!--<div class="hotMusicList-item" v-for="item in MusicList" v-bind:key="item.value">-->
-                        <!--<div class="hotMusicList-left">-->
-                            <!--<p class="hotMusicList-left-title">{{item.name}}-->
-                                <!--<span v-for="items in item.alia"-->
-                                      <!--class="smalltitle">{{'(' + items + ')'}}</span>-->
-                            <!--</p>-->
-                            <!--<p class="hotMusicList-left-tag"><img src="../../BaseMenu/index_ic.png" class="tag" v-if="item.cd!=1">{{item.ar[0].name}} -  - {{item.name}}</p>-->
-                        <!--</div>-->
-                        <!--<div class="hotMusicList-right">-->
-                            <!--<img src="../../BaseMenu/play.png">-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
+                <list :MusicList="MusicList" :MenuType="1" :showIndex="true"></list>
             </div>
         </hot-scroll>
         <Loadings :IsShow="IsShow"></Loadings>

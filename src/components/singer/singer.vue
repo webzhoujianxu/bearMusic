@@ -1,7 +1,7 @@
 <template>
     <div>
         <HotScroll class="HotWrap" :pullup="true" @scrollToEnd="scrollToEnd" :click="true" ref="scorls">
-            <div style="overflow: hidden;padding-bottom: 40px">
+            <div style="overflow: hidden;">
                   <div class="singer-list">
                       <div class="singer-list-item" v-for="item in singerList" :key="item.value" @click="$router.push('/singerDetail/'+item.id)">
                           <img :src="item.img1v1Url" class="singerAvator">
@@ -28,7 +28,7 @@
               singerList:[],
               limit:30,
               offset:0,
-              loadingStutes:false,
+              loadingStutes:true,
               hasMore:true
           }
        },
@@ -43,13 +43,14 @@
            getlist(){
                 this.$axios.get(api+'top/artists?offset='+this.offset+'&limit='+this.limit)
                     .then((res)=>{
-                       this.loadingStutes = false;
                        this.singerList = this.singerList.concat(res.data.artists);
-                       if(res.data.artists.length>0){
+
+                       if(res.data.more){
                            this.hasMore = true;
                        }
                        else{
                            this.hasMore = false;
+                           this.loadingStutes = false;
                        }
 
                     })
