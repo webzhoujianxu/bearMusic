@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <h2 class="HotTitle" style="margin-top: .5rem;margin-bottom: .4rem">最新音乐</h2>
-                <list :MusicList="MusicList"></list>
+                <list :MusicList="MusicList" ></list>
             </div>
         </hot-scroll>
         <Loadings :IsShow="IsShow"></Loadings>

@@ -51,7 +51,11 @@ module.exports = {
       },
         {
             test:   /\.css$/,
-            loader: "style-loader!css-loader!postcss-loader"
+            loader: "style-loader!css-loader!postcss-loader",
+            include:[
+
+            ]
+
         },
       {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,

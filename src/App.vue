@@ -9,11 +9,13 @@
 
 <script>
   import MusicHeader from './components/base/head.vue';
+  import smallPlayer from './components/base/smallPlayer.vue';
   import {RemYdui} from './BaseMenu/Rem';
 export default {
   name: 'App',
   components:{
-      MusicHeader
+      MusicHeader,
+      smallPlayer
   },
   created(){
       RemYdui()
