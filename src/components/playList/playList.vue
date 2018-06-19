@@ -1,62 +1,65 @@
 <template>
+    <div>
         <transition  name="normal">
             <div class="play-wrap">
-            <div style="width: 100%;height: 100%">
-                <div class="singer_photo"
-                     :style="'background-image:url('+'//music.163.com/api/img/blur/'+list.al.pic+')'"
-                     v-if="list.al">
+                <div style="width: 100%;height: 100%">
+                    <div class="singer_photo"
+                         :style="'background-image:url('+'//music.163.com/api/img/blur/'+list.al.pic+')'"
+                         v-if="list.al">
 
-                </div>
-                <div class="playList">
-                    <div class="play-list-head">
-                        <img src="./toback.png" style="vertical-align: middle;height: 25px" @click="$router.back()">
-                        <div class="names">
-                            <p class="big">{{list.name}}</p>
-                            <p class="small">{{ar.name}}</p>
+                    </div>
+                    <div class="playList">
+                        <div class="play-list-head">
+                            <img src="./toback.png" style="vertical-align: middle;height: 25px" @click="$router.back()">
+                            <div class="names">
+                                <p class="big">{{list.name}}</p>
+                                <p class="small">{{ar.name}}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="linesa">
-                        <img src="./needle.png" class="lines"/>
-                    </div>
-                    <div class="centerAreas">
-                        <div class="inset-crirle start" v-bind:class="!canplay?'pause':''">
-                            <img v-if="list.al" :src="list.al.picUrl" class="inset-img">
+                        <div class="linesa">
+                            <img src="./needle.png" class="lines"/>
                         </div>
-                    </div>
-                    <div class="player">
-                        <div class="progress-wrap">
-                            <span>{{formatTime(currentTime)}}</span>
-                            <div class="progress" @click.stop="setTimes($event)" ref="cps">
-                                <div class="inset-progress" :style="'width:'+getWidth+'%'"
+                        <div class="centerAreas">
+                            <div class="inset-crirle start" v-bind:class="!canplay?'pause':''">
+                                <img v-if="list.al" :src="list.al.picUrl" class="inset-img">
+                            </div>
+                        </div>
+                        <div class="player">
+                            <div class="progress-wrap">
+                                <span>{{formatTime(currentTime)}}</span>
+                                <div class="progress" @click.stop="setTimes($event)" ref="cps">
+                                    <div class="inset-progress" :style="'width:'+getWidth+'%'"
 
-                                >
-                                    <div class="squres">
-                                        <div class="center-squres"
-                                             @click.stop="doNotihing"
-                                             @touchstart="touchStarts($event)"
-                                             @touchmove="touchMoves($event)"
-                                             @touchend="touchEnds($event)"></div>
+                                    >
+                                        <div class="squres">
+                                            <div class="center-squres"
+                                                 @touchstart="touchStarts($event)"
+                                                 @touchmove="touchMoves($event)"
+                                                 @touchend="touchEnds($event)"></div>
+                                        </div>
                                     </div>
                                 </div>
+                                <span>{{alltime}}</span>
                             </div>
-                            <span>{{alltime}}</span>
-                        </div>
-                        <div class="bottom-toobar">
-                            <span class="icon-sjbf"></span>
-                            <span class="icon-last"></span>
-                            <span class=" ct" v-bind:class="!canplay?'icon-play':'icon-zt'" @click="playMusic"></span>
-                            <span class="icon-next"></span>
-                            <span class="icon-lbxh"></span>
+                            <div class="bottom-toobar">
+                                <span class="icon-sjbf"></span>
+                                <span class="icon-last"></span>
+                                <span class=" ct" v-bind:class="!canplay?'icon-play':'icon-zt'" @click="playMusic"></span>
+                                <span class="icon-next"></span>
+                                <span class="icon-lbxh"></span>
 
+                            </div>
                         </div>
+
                     </div>
-
                 </div>
+                <!--"-->
+                <audio :src="'http://music.163.com/song/media/outer/url?id='+$route.params.id+'.mp3'"  ref="audios"  @canplay="canPlay" @timeupdate="updateTime"  @error="errors" ></audio>
             </div>
-                <audio :src="'http://music.163.com/song/media/outer/url?id='+$route.params.id+'.mp3'"  ref="audios" @timeupdate="updateTime" @canplay="canPlay"></audio>
-            </div>
-
         </transition>
+        <router-view></router-view>
+    </div>
+
 </template>
 <script>
     var begin,beginPoint;
@@ -78,7 +81,7 @@
         },
         computed: {
             getWidth() {
-                return (this.useTIme / this.percent) * 100
+                return (this.currentTime / this.percent) * 100
             },
             ...mapGetters([
                 'playId'
@@ -97,9 +100,6 @@
             this.id = this.$route.params.id;
         },
         mounted() {
-            setTimeout(function () {
-
-            }, 2000)
         },
         methods: {
             doNotihing(){},
@@ -124,8 +124,7 @@
                 }
             },
             updateTime(){
-                this.currentTime =  this.useTIme =  this.$refs.audios.currentTime;
-
+                this.currentTime  =  this.$refs.audios.currentTime;
                 if (this.currentTime >= this.percent) {
                     this.canplay = false;
                 }
@@ -151,44 +150,49 @@
             },
             canPlay(){
                 this.canplay = true;
+                this.$refs.audios.play();
+
                 setTimeout(()=>{
-                    this.$refs.audios.play();
                     if(this.canplay){
                          this.alltime = this.formatTime(this.$refs.audios.duration);
                          this.percent = this.$refs.audios.duration;
                     }
-
                 },20);
             },
             setTimes(e){
-                this.currentTime = this.useTIme =  this.$refs.audios.currentTime = Number(this.percent) * e.offsetX / this.$refs.cps.clientWidth;
+                this.currentTime  =  this.$refs.audios.currentTime = Number(this.percent) * e.offsetX / this.$refs.cps.clientWidth;
             },
             touchStarts(e){
+                e.preventDefault()
                 begin = e.target.offsetLeft;
                 beginPoint = e.changedTouches[0].pageX;
+                this.useTIme = this.currentTime;
             },
             touchMoves(e){
                 if (beginPoint - e.changedTouches[0].pageX > 0) {
-                    var pg = this.currentTime - (Number(this.percent) * ((beginPoint - e.changedTouches[0].pageX) / this.$refs.cps.clientWidth));
-                    this.useTIme  = pg;
+                    var pg = this.useTIme - (Number(this.percent) * ((beginPoint - e.changedTouches[0].pageX) / this.$refs.cps.clientWidth));
+                    this.currentTime =   this.$refs.audios.currentTime = pg ;
 
                 }
                 else {
-                    var pg = this.currentTime + -(Number(this.percent) * ((beginPoint - e.changedTouches[0].pageX) / this.$refs.cps.clientWidth));
+                    var pg = this.useTIme + -(Number(this.percent) * ((beginPoint - e.changedTouches[0].pageX) / this.$refs.cps.clientWidth));
+
                     if(pg<this.percent){
-                        this.useTIme = pg;
+                        this.currentTime =  this.$refs.audios.currentTime = pg;
                     }
 
                 }
             },
             touchEnds(e){
 
+            },
+            errors(code){
+                  this.canplay = false;
             }
 
         },
         activated(){
                this.getMusicDetail();
-
         }
     }
 </script>
@@ -406,6 +410,8 @@
     }
     .progress{
         flex: 1;
+        -moz-flex:1;
+        -moz-box-flex: 1;
         background: #c2c0ce;
         height: 3px;
         margin: 0 20px;
@@ -440,6 +446,7 @@
          top:-7.5px;
          text-align: center;
           line-height:18px;
+        z-index: 100;
 
     }
 </style>

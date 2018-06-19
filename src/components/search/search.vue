@@ -135,6 +135,7 @@
         display: inline-block;
         text-overflow: ellipsis;
         overflow: hidden;
+        padding: 5px 0;
     }
 
     .search-to-item {
@@ -184,7 +185,7 @@
     import {api} from '../../BaseMenu/config';
     import HotScroll from '../base/scroll.vue';
     import searchScroll from '../base/scroll.vue';
-
+    import {mapActions} from 'vuex';
     export default {
         data() {
             return {
@@ -256,8 +257,14 @@
                 }
             },
             selectItem(item){
-
-            }
+                this.SetPlayId({
+                    PlayID:item.id
+                })
+                this.$router.push('/playlist/' + item.id)
+            },
+            ...mapActions([
+                'SetPlayId'
+            ])
         }
     }
 </script>

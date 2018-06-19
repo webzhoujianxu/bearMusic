@@ -6,6 +6,7 @@ import singer from '@/components/singer/singer.vue';
 import singerDetail from '@/components/singer/singerDetail.vue';
 import search from '@/components/search/search.vue';
 import playlist from '@/components/playList/playList.vue';
+import commet from '@/components/playList/commet.vue';
 Vue.use(Router)
 
 export default new Router({
@@ -38,7 +39,11 @@ export default new Router({
         },
         {
             path:'/playlist/:id',
-            component:playlist
+            component:playlist,
+            children:[{
+                path:'/commet/:id'
+
+            }]
 
         }
     ]

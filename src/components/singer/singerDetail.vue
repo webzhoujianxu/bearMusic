@@ -8,7 +8,7 @@
                 <img src="./back.png" class="tobacks" @click="$router.back()">
               {{info.name}}
             </div>
-            <HotScroll class="scrollwrap" ref="hots" :probeType="3" :listenScroll="true" @scroll="scroll" :flick="true">
+            <HotScroll class="scrollwrap" ref="hots" :probeType="3" :listenScroll="true" @scroll="scroll" :click="true">
                 <div>
                     <list :MusicList="MusicList" :MenuType="1"></list>
                 </div>
@@ -54,7 +54,8 @@
 
 
                 this.$refs.wraps.style.transform = `translate3d(0,${translateY}px,0) scale(${scale})`;
-            }
+            },
+
         },
         created() {
             this.getlist();
@@ -65,7 +66,7 @@
         },
         methods: {
             getlist() {
-                this.$axios.get(api + 'artists?id=' + this.$route.params.id + '&limit=100' + '&offset=0')
+                this.$axios.get(api + 'artists?id=' + this.$route.params.id + '&limit=100' + '&offset=0&time='+new Date())
                     .then((res) => {
                         this.MusicList = res.data.hotSongs;
                         this.info = res.data.artist;
