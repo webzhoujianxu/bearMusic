@@ -1,20 +1,16 @@
 <template>
     <div>
-        <div class="MusicHead">
-                <span class="MusicTitle">
-                    BearMusic | 比比熊音乐
-                </span>
-        </div>
-        <HotScroll :click="true" :scrollX="true">
+            <div class="MusicHead">
+                    <span class="MusicTitle">
+                        BearMusic | 比比熊音乐
+                    </span>
+            </div>
             <div class="MusicBar">
                 <router-link tag="div" to="/HotPage" class="MusicBar-item"><span class="inset">推荐音乐</span></router-link>
                 <router-link tag="div" to="/HotMusic" class="MusicBar-item"><span class="inset">热门榜单</span></router-link>
                 <router-link tag="div" to="/singer" class="MusicBar-item"><span class="inset">热门歌手</span></router-link>
                 <router-link tag="div" to="/search" class="MusicBar-item"><span class="inset">搜索</span></router-link>
-                <router-link tag="div" to="/f" class="MusicBar-item"><span class="inset">最新歌曲</span></router-link>
-
             </div>
-        </HotScroll>
     </div>
 
 
@@ -47,7 +43,7 @@
 
     .MusicBar {
         box-sizing: border-box;
-        width: 500px;
+        width: 100%;
         height: .8rem;
         border-bottom: 1px solid whitesmoke;
         font-size: 0;
@@ -63,7 +59,7 @@
         position: relative;
         box-sizing: border-box;
         float: left;
-        width: 100px;
+        width: 25%;
         display: flex;
         flex-direction: row;
         justify-content: center;

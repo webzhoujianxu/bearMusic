@@ -30,3 +30,27 @@ export const  RemYdui = function(){
     window.addEventListener(resizeEvt, recalc, false);
     doc.addEventListener('DOMContentLoaded', recalc, false);
 }
+export const TransformTime  = function (timestamp) {
+        var timestamp = timestamp;
+        var d = new Date(timestamp * 1000);    //根据时间戳生成的时间对象
+        var year = d.getFullYear();
+        var Month = d.getMonth() + 1;
+        if (Month.toString().length < 2) {
+            Month = '0' + Month;
+        }
+        var datas = d.getDate();
+        if (datas.toString().length < 2) {
+            datas = '0' + datas;
+        }
+        var hour = d.getHours();
+        if (hour.toString().length < 2) {
+            hour = '0' + hour;
+        }
+        var minute = d.getMinutes();
+        if (minute.toString().length < 2) {
+            minute = '0' + minute;
+        }
+        var times = year + '-' + Month + '-' + datas + ' ' + hour + ':' + minute;
+        return times;
+
+}

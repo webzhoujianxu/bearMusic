@@ -1,62 +1,103 @@
 <template>
-        <transition  name="normal">
-            <div class="play-wrap">
-            <div style="width: 100%;height: 100%">
-                <div class="singer_photo"
-                     :style="'background-image:url('+'//music.163.com/api/img/blur/'+list.al.pic+')'"
-                     v-if="list.al">
+    <transition  name="normal">
+          <div class="play-wrap">
+                <div style="width: 100%;height: 100%">
+                    <div class="singer_photo"
+                         :style="'background-image:url('+'//music.163.com/api/img/blur/'+list.al.pic+')'"
+                         v-if="list.al">
 
-                </div>
-                <div class="playList">
-                    <div class="play-list-head">
-                        <img src="./toback.png" style="vertical-align: middle;height: 25px" @click="$router.back()">
-                        <div class="names">
-                            <p class="big">{{list.name}}</p>
-                            <p class="small">{{ar.name}}</p>
+                    </div>
+                    <div class="playList">
+                        <div class="play-list-head">
+                            <img src="./toback.png" style="vertical-align: middle;height: 25px" @click="$router.back()">
+                            <div class="names">
+                                <p class="big">{{list.name}}</p>
+                                <p class="small">{{ar.name}}</p>
+                            </div>
+                            <div class="right" style="float: right;font-size: 14px;">
+                                <span @click="getMessage">留言</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="linesa">
-                        <img src="./needle.png" class="lines"/>
-                    </div>
-                    <div class="centerAreas">
-                        <div class="inset-crirle start" v-bind:class="!canplay?'pause':''">
-                            <img v-if="list.al" :src="list.al.picUrl" class="inset-img">
+                        <div class="linesa">
+                            <img src="./needle.png" class="lines"/>
                         </div>
-                    </div>
-                    <div class="player">
-                        <div class="progress-wrap">
-                            <span>{{formatTime(currentTime)}}</span>
-                            <div class="progress" @click.stop="setTimes($event)" ref="cps">
-                                <div class="inset-progress" :style="'width:'+getWidth+'%'"
+                        <div class="centerAreas">
+                            <div class="inset-crirle start" v-bind:class="!canplay?'pause':''">
+                                <img v-if="list.al" :src="list.al.picUrl" class="inset-img">
+                            </div>
+                        </div>
+                        <div class="player">
+                            <div class="progress-wrap">
+                                <span>{{formatTime(currentTime)}}</span>
+                                <div class="progress" @click.stop="setTimes($event)" ref="cps">
+                                    <div class="inset-progress" :style="'width:'+getWidth+'%'"
 
-                                >
-                                    <div class="squres">
-                                        <div class="center-squres"
-                                             @click.stop="doNotihing"
-                                             @touchstart="touchStarts($event)"
-                                             @touchmove="touchMoves($event)"
-                                             @touchend="touchEnds($event)"></div>
+                                    >
+                                        <div class="squres">
+                                            <div class="center-squres"
+                                                 @click.stop="doNotihing"
+                                                 @touchstart="touchStarts($event)"
+                                                 @touchmove="touchMoves($event)"
+                                                 @touchend="touchEnds($event)"></div>
+                                        </div>
                                     </div>
                                 </div>
+                                <span>{{alltime}}</span>
                             </div>
-                            <span>{{alltime}}</span>
-                        </div>
-                        <div class="bottom-toobar">
-                            <span class="icon-sjbf"></span>
-                            <span class="icon-last"></span>
-                            <span class=" ct" v-bind:class="!canplay?'icon-play':'icon-zt'" @click="playMusic"></span>
-                            <span class="icon-next"></span>
-                            <span class="icon-lbxh"></span>
+                            <div class="bottom-toobar">
+                                <span class="icon-sjbf"></span>
+                                <span class="icon-last"></span>
+                                <span class=" ct" v-bind:class="!canplay?'icon-play':'icon-zt'" @click="playMusic"></span>
+                                <span class="icon-next"></span>
+                                <span class="icon-lbxh"></span>
 
+                            </div>
                         </div>
+
+                    </div>
+                </div>
+                <audio :src="'http://music.163.com/song/media/outer/url?id='+$route.params.id+'.mp3'"  ref="audios" @timeupdate="updateTime" @canplay="canPlay"></audio>
+                <div class="commet-list" v-if="commetStutes">
+                    <div class="commet-head">
+                        <img src="./toback.png" class="back-btn" style="vertical-align: middle;height: 25px" @click="commetStutes=false">
+                        <span style="font-size: 16px;vertical-align: middle;color: white;margin-left: 10px">评论({{total}})</span>
                     </div>
 
-                </div>
-            </div>
-                <audio :src="'http://music.163.com/song/media/outer/url?id='+$route.params.id+'.mp3'"  ref="audios" @timeupdate="updateTime" @canplay="canPlay"></audio>
-            </div>
+                    <div >
+                        <Scroll class="commet-con" :pullup="true" ref="slk" @scrollToEnd="scrollToEnd">
+                            <div>
+                               <div class="commet-con-item" v-for="item in commetList" v-bind:key="item.value">
+                               <div class="commet-con-head">
 
-        </transition>
+                                   <div class="c-head-l">
+                                       <img :src="item.user.avatarUrl" class="avaor">
+                                   </div>
+                                   <div class="c-head-r">
+                                       <span class="name-c">{{item.user.nickname}}</span>
+                                       <span class="time-c">{{TransformTime(item.time)}}</span>
+                                   </div>
+                               </div>
+                                 <div class="c-con" >
+                                     {{item.content}}
+                                      <div v-for="items in item.beReplied" :key="item.value" class="col">
+                                          <span class="l">@{{items.user.nickname}}</span> {{items.content}}
+                                      </div>
+                                 </div>
+
+
+                               </div>
+                                <div class="loadingStutes" v-show="hasMore">
+                                    <img src="../../BaseMenu/loading.png" width="20" height="20" class="lo" style="vertical-align: middle">
+                                    <span style="vertical-align: middle">正在加载...</span>
+                                </div>
+                            </div>
+                        </Scroll>
+                    </div>
+                </div>
+          </div>
+    </transition>
+
+
 </template>
 <script>
     var begin,beginPoint;
@@ -73,8 +114,17 @@
                 currentTime:0,
                 percent:0,
                 alltime:0,
-                useTIme:0
+                useTIme:0,
+                commetStutes:false,
+                limit:30,
+                offsets:0,
+                total:0,
+                hasMore:true,
+                commetList:[]
             }
+        },
+        components:{
+            Scroll
         },
         computed: {
             getWidth() {
@@ -95,6 +145,7 @@
         },
         created() {
             this.id = this.$route.params.id;
+            this.getCommetList()
         },
         mounted() {
             setTimeout(function () {
@@ -183,16 +234,147 @@
             },
             touchEnds(e){
 
+            },
+            getCommetList(type){
+                 this.$axios.get(api+'comment/music?id='+this.$route.params.id+'&limit='+this.limit+'&offset='+this.offsets*this.limit)
+                     .then((res)=>{
+                       this.commetList = this.commetList.concat(res.data.comments);
+                       if(type){
+                           this.$nextTick(()=>{
+                               this.$refs.slk.refresh();
+                           })
+                       }
+                       else{
+                           this.total = res.data.total
+                       }
+                     })
+            },
+            getMessage(){
+                this.getCommetList();
+                this.commetStutes = true;
+            },
+            scrollToEnd(){
+                this.offsets++;
+                this.getCommetList(1);
+
+            },
+            TransformTime(timestamp){
+                var timestamp = timestamp;
+                var d = new Date(timestamp);    //根据时间戳生成的时间对象
+                var year = d.getFullYear();
+                var Month = d.getMonth() + 1;
+                if (Month.toString().length < 2) {
+                    Month = '0' + Month;
+                }
+                var datas = d.getDate();
+                if (datas.toString().length < 2) {
+                    datas = '0' + datas;
+                }
+                var hour = d.getHours();
+                if (hour.toString().length < 2) {
+                    hour = '0' + hour;
+                }
+                var minute = d.getMinutes();
+                if (minute.toString().length < 2) {
+                    minute = '0' + minute;
+                }
+                var times = year + '-' + Month + '-' + datas + ' ' + hour + ':' + minute;
+                return times;
+
             }
 
         },
         activated(){
                this.getMusicDetail();
-
+        },
+        deactivated(){
+               this.commetStutes = false;
         }
     }
 </script>
 <style scoped>
+    .col{
+        padding:  .1rem;
+        background: whitesmoke;
+    }
+    .l {
+        color: blue;
+    }
+    .commet-con{
+        position: absolute;
+        top:40px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        overflow: hidden;
+    }
+    .lineer{
+        margin:10px 0;
+        height: 1px;
+        float:right;background: whitesmoke;
+        width: calc(100% - 40px - .45rem);
+    }
+    .c-con{
+        font-size:.3rem;
+        width: calc(100% - 40px - .45rem);
+        float: right;
+        margin-right: .1rem;
+        line-height:.6rem;
+        border-bottom: 1px solid whitesmoke;
+        /*padding: .2rem 0;*/
+        padding-bottom: .2rem;
+    }
+    .commet-con-item{
+        overflow: hidden;
+    }
+    .commet-con-head{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+    .c-head-r{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 40px;
+    }
+    .time-c{
+        font-size:12px;
+    }
+    .name-c{
+        font-size:14px;
+    }
+    .avaor{
+         width: 40px;
+         height: 40px;
+         border-radius: 50%;
+         margin-left: .15rem;
+         margin-right: .2rem;
+    }
+    .commet-con-head{
+        margin-top: .2rem;
+    }
+    .back-btn{
+        margin-left: .15rem;
+    }
+    .commet-head{
+        background: #d43c33;
+        height: 40px;
+        width: 100%;
+        font-size:0;
+        line-height:40px;
+    }
+    .commet-list{
+         width: 100%;
+         height: 100%;
+         position: fixed;
+         left: 0;
+         top:0;
+         bottom: 0;
+         right: 0;
+         z-index: 300;
+         background: white;
+    }
     .pause {
         animation-play-state: paused!important;
         -webkit-animation-play-state: paused!important;
@@ -441,5 +623,29 @@
          text-align: center;
           line-height:18px;
 
+    }
+    .loadingStutes{
+        font-size:.28rem;
+        text-align: center;
+        padding: 10px 0;
+    }
+    .lo{
+        animation: loading 1s steps(12, end) infinite;
+    }
+    @keyframes loading {
+        0% {
+            -webkit-transform: rotate3d(0, 0, 1, 0deg);
+            transform: rotate3d(0, 0, 1, 0deg);
+            -ms-transform: rotate3d(0, 0, 1, 0deg);
+            -moz-transform: rotate3d(0, 0, 1, 0deg);
+            -o-transform: rotate3d(0, 0, 1, 0deg);
+        }
+        100% {
+            -webkit-transform: rotate3d(0, 0, 1, 360deg);
+            transform: rotate3d(0, 0, 1, 360deg);
+            -moz-transform: rotate3d(0, 0, 1, 360deg);
+            -ms-transform: rotate3d(0, 0, 1, 360deg);
+            -o-transform: rotate3d(0, 0, 1, 360deg);
+        }
     }
 </style>
